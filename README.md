@@ -4,7 +4,13 @@
 ---
 
 ## 출처:
-[생활코딩 node.js](https://youtu.be/3RS_A87IAPA)
+**유튜브**
+[생활코딩 node.js 유튜브](https://youtu.be/3RS_A87IAPA)
+
+**홈페이지**
+[생활코딩 node.js 페이지](https://opentutorials.org/course/3332/21032)
+
+---
 
 - node.js 설치 및 동작확인
 - node.js로 로컬 환경 동작
