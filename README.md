@@ -1,8 +1,6 @@
 # web2-node-js
 생활코딩 Node.js 
 
----
-
 ## 출처:
 **유튜브**
 [생활코딩 node.js 유튜브](https://youtu.be/3RS_A87IAPA)
