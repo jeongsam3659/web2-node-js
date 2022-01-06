@@ -1,0 +1,56 @@
+stack1
+
+Q
+
+// Load the http module to create an http server.
+var http = require('http');
+
+// Configure our HTTP server to respond with Hello World to all requests.
+var server = http.createServer(function (request, response) {
+  response.writeHead(200, {"Content-Type": "text/plain"});
+  response.end("Hello World\n");
+});
+
+// Listen on port 8000, IP defaults to 127.0.0.1
+server.listen(8000);
+
+// Put a friendly message on the terminal
+console.log("Server running at http://127.0.0.1:8000/");
+How can I get the parameters from the query string?
+
+http://127.0.0.1:8000/status?name=ryan
+In the documentation, they mentioned:
+
+node> require('url').parse('/status?name=ryan', true)
+{ href: '/status?name=ryan'
+, search: '?name=ryan'
+, query: { name: 'ryan' }
+, pathname: '/status'
+}
+But I did not understand how to use it. Could anyone explain?
+
+
+
+
+A
+
+var http = require('http');
+var url = require('url');
+
+// Configure our HTTP server to respond with Hello World to all requests.
+var server = http.createServer(function (request, response) {
+  var queryData = url.parse(request.url, true).query;
+  response.writeHead(200, {"Content-Type": "text/plain"});
+
+  if (queryData.name) {
+    // user told us their name in the GET request, ex: http://host:8000/?name=Tom
+    response.end('Hello ' + queryData.name + '\n');
+
+  } else {
+    response.end("Hello World\n");
+  }
+});
+
+// Listen on port 8000, IP defaults to 127.0.0.1
+server.listen(8000);
+I suggest you read the HTTP module documentation to get an idea of what you get in the createServer callback. You should also take a look at sites like http://howtonode.org/ and checkout the Express framework to get started with Node faster.

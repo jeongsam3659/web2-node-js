@@ -1,8 +1,9 @@
 오후 6:38 2022-01-05
 
 //경로
-C:\GitLog\Git\인프런\node.js
+C:\GitLog\Git\web2-node-js
 
+---
 
 #1
 web application
@@ -24,6 +25,7 @@ Node.js runtime
 
 Node.js runtime에서 js을 활용하여 Node.js application을 만든다.
 
+---		---		---		---
 
 #3
 window설치
@@ -47,6 +49,7 @@ console.log(1+3);
 cmd node node파일을 입력하면 
 node파일의 결과값이 cmd창에 출력된다.
 
+---		---		---		---
 
 #4.
 예제파일들을 실행구역에 복사하고
@@ -71,6 +74,7 @@ app.listen(3000);
 한뒤 node main.js로 실행. 브라우저 localhost:3000하면 해당 웹페이지가 가동된다.
 cmd ctrl + c하면 node종료
 
+---		---		---		---
 
 #5.
 	__dirname + url
@@ -89,3 +93,76 @@ response.end("fileName :" + url); 라고 변경하고 실행시
 브라우저에
 fileName :/3.html
 만 출력되는걸 확인할 수 있다.
+
+---		---		---		---
+
+오후 3:08 2022-01-06
+#6.
+
+ 	DATA Type
+폴더Syntax에 문법관련이 들어갈 예정.
+
+	Number
+JS에서 숫자는 다른 표시없는 숫자가 Number이다.
+	
+	String
+'', ""로 문자를 묶으면 문자열이 된다.
+글자수 확인 - string.length
+
+	변수 Variable
+a = 1;
+js에서는 변수선언시 따로 타입선언 없어도 자동으로 적용.
+과거에는 var
+하지만 let(변수) / const(상수)를 붙혀주는게 좋다.
+
+	Template Literal
+	(과거)
+	\ 
+문자열 내에서 \는 TAB(탭)과 동일한 기능으로.
+	\n\
+줄바꿈을 나타내는 기호
+	
+	(현재)
+	리터널 `(~ 과 같이있는 그레이브 엑센트)
+ex_
+`Dear ${client} 
+
+Lorem ipsum dolor sit amet,consectetur adipisicing elit. ...`
+
+변수는 ${변수} 또는 식을 ${1+2}.
+이런식으로 따로 \n나 +변수+를 추가시키는 것없이 형태 그대로를 출력할 수 있게된다.
+
+---		---		---		---
+
+#7. 	URL이해
+
+http:// opentutoials.org:3000/main?id=HTML&page=12
+
+	http - protocol
+	통신규칙
+사용자가 서버에 접속할때 어떤방식으로 통신할건지 규칙
+
+	opentutoials.org
+	호스트, 도메인
+특정 주소를 가리킨다.
+
+	:3000
+	포트번호 
+클라이언트가 접속할때 3000번 포트에 연결된 서버와 연결한다는뜻.
+
+	main
+	path
+서버컴퓨터의 어떤? 디렉토리 어떤? 파일인지 가르키는 것.
+
+	?id=HTML&page=12
+	query string
+시작은 ?로 하고
+값 과 값사이에는 엔퍼센트(&)로 구분하고
+키 과 값은 =으로 표시.(key=value)
+
+
+#8. 	URL (1)
+nodejs url parse query string
+
+var queryData = url.parse(_url, true).query;
+로 어떻게 구성되어있는지 확인.
