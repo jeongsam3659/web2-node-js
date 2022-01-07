@@ -166,3 +166,36 @@ nodejs url parse query string
 
 var queryData = url.parse(_url, true).query;
 로 어떻게 구성되어있는지 확인.
+
+
+#11.	동적페이지
+1. resonse.write밑에
+var template = `
+ (1.html내용)
+`
+내용을 넣고 HTML이라고 표기되있는 타이틀과 h2부근을 ${queryData.id}을 교체후
+
+2. response.end(template);
+
+3. localhost:3000 창을 띄우면 1.html 비슷하게 나오고 ${}자리는 undefined로 표시된다.
+ 3000/?id=HTML 로 입력시 ${}는 HTML으로 바뀌는걸 확인할 수 있다.
+
+4. li에 담긴 a태그 경로를 수정하여.
+	1.html > /?id=Html
+	2.html > /?id=Css
+	3.html > /?id=JavaScript
+다시 실행보면 
+${}자리가 해당 a태그를 클릭한 값대로 변화는걸 알 수있다.
+
+5. 변수를 좀더 알아보기 쉽게 재정의
+var title = queryData.id,
+${title}
+
+6. h1 a태그 경로를 "/" 로 수정. 이렇게 될시 첫번째 조건문에 해당됨.
+	첫번째 조건문( _url == "/" ) true일시
+	title = "Welcome"으로 수정 후 실행하면 h1태그에 Welcome이 뜨는걸 볼수 있다.
+
+>> 이렇게 할시 하나하나html 수정하지 않고도 한곳만 변경하여 유지보수 및 재사용이 쉬워진다.
+
+
+#12.
