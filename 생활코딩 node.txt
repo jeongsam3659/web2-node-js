@@ -1,11 +1,15 @@
 오후 6:38 2022-01-05
 
+Node.js란?
+ 브라우저에서 Js를 가동할 수 있는걸 브라우저 밖에서도 실행할 수 있게끔 하는 프로그램.
+- 노마드코더 -
+
 //경로
 C:\GitLog\Git\web2-node-js
 
 ---
 
-#1
+	#1
 web application
 <<<
 html
@@ -16,7 +20,7 @@ web에서 html을 활용하여 web applicationd을 만든다.
 
 이와 동일하게
 
-#2
+	#2
 Node.js application
 <<<
 js
@@ -27,7 +31,7 @@ Node.js runtime에서 js을 활용하여 Node.js application을 만든다.
 
 ---		---		---		---
 
-#3
+	#3
 window설치
 
 	1.
@@ -51,7 +55,7 @@ node파일의 결과값이 cmd창에 출력된다.
 
 ---		---		---		---
 
-#4.
+	#4.
 예제파일들을 실행구역에 복사하고
 
 main.js에 해당 내용을 기입.
@@ -76,7 +80,7 @@ cmd ctrl + c하면 node종료
 
 ---		---		---		---
 
-#5.
+	#5.
 	__dirname + url
  
 console.log();를 통해 역할파악
@@ -97,7 +101,7 @@ fileName :/3.html
 ---		---		---		---
 
 오후 3:08 2022-01-06
-#6.
+	#6.
 
  	DATA Type
 폴더Syntax에 문법관련이 들어갈 예정.
@@ -134,7 +138,7 @@ Lorem ipsum dolor sit amet,consectetur adipisicing elit. ...`
 
 ---		---		---		---
 
-#7. 	URL이해
+	#7. 	URL이해
 
 http:// opentutoials.org:3000/main?id=HTML&page=12
 
@@ -168,7 +172,7 @@ var queryData = url.parse(_url, true).query;
 로 어떻게 구성되어있는지 확인.
 
 
-#11.	동적페이지
+	#11.	동적페이지
 	1. resonse.write밑에
 var template = `
  (1.html내용)
@@ -198,7 +202,7 @@ title = "Welcome"으로 수정 후 실행하면 h1태그에 Welcome이 뜨는걸
 >> 이렇게 할시 하나하나html 수정하지 않고도 한곳만 변경하여 유지보수 및 재사용이 쉬워진다.
 
 
-#12.	CRUD
+	#12.	CRUD
 	Create
 	Read
 	Update
@@ -236,7 +240,7 @@ fs.readFile("읽을 파일명.확장자", "utf8", (err, data) => {});
 
 
 
-#13.	#12에 해본걸 적용시켜보기.
+	#13.	#12에 해본걸 적용시켜보기.
 	**1
  data/폴더 밑에 HTML , CSS , JavaScript 각각 파일을 만들고 <p>태그 내용을 복붙하기.
 
@@ -286,9 +290,97 @@ fs.readFile("읽을 파일명.확장자", "utf8", (err, data) => {});
 	description변수는 해당 파일 내용을 가져온다.
 
 
-	
+	#14. Boolean
+	참true. 과 거짓false.
+Boolean을 다루기위한 Comparison operator(비교 연산자) , Conditiononal statement(조건문).
 
 
+console.log(1 == 1); //true
+console.log(1 == 2); //false
+console.log(1 > 2); //false
+console.log(2 >= 1); //true
+
+*
+비교연산자
+ == , === 로 나눌 수 있는데 세세하게 비교시에는 우측(===)을 사용한다.
+ =(대입연산자)
+
+이유:?
+ > ..
+==는 Equal Operator , ===는 Strict(엄격한) Equal Operator
+==은 단순히 값을 비교해서 true/false를 출력하고
+===은 값과 값의 종류(Data Type)을 비교해서 true/false를 출력한다.
+
+[출처](https://steemit.com/kr-dev/@cheonmr/js-operator)
+
+
+	#15. 제어문
+Program란?
+ > 시간순서에따라 진행되는 절차.순서를 프로그램이라고 한다.
+
+
+
+	#16. 조건문
+??
+ > 조건에 따라 프로그램의 흐름을 제어하는 방식.
+
+
+	#17. 콘솔 입력값 (IO)
+
+input	>>	JS	>>	output
+동의어
+Parameter(형식)			
+Argument(매개변수)
+
+검색?
+ > nodejs console input parameters
+ > https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program
+	**1
+---
+
+var args = process.argv;
+console.log(args);
+
+---
+Cmd
+node Comparison.js egoing
+ 출력
+[  
+  'C:\\Program Files\\nodejs\\node.exe',		  // node.js 런타임이 어디에 위치한지 정보
+  'C:\\GitLog\\Git\\web2-node-js\\syntax\\Comparison.js', // 해당 파일을 실행시키는 위치정보
+  'egoing'						  // 입력값을 표시
+]
+
+3번째 정보부터 입력된 정보 가져온다.
+0 1 2번.
+
+	**2
+---
+
+var args = process.argv;
+console.log(args[2]);
+
+---
+Cmd
+node Comparison.js egoing
+ 출력
+egoing
+이 나타난다.
+
+	**3
+---
+
+var args = process.argv;
+console.log(args[2]);
+
+if (args[2] === "1") {
+    console.log("문자 1 true");
+} else {
+    console.log("문자= " + args[2] + " false");
+}
+
+---
+[2]번째 값에따라 1일 경우 true / 그외는 false를 처리하는 조건문을 만들 수 있다.
 
 
 
