@@ -207,18 +207,27 @@ title = "Welcome"으로 수정 후 실행하면 h1태그에 Welcome이 뜨는걸
 https://nodejs.dev/learn/reading-files-with-nodejs
 
 const fs = require("fs");
-//구버젼
-**1	
+
+**1	//구버젼
+---
+	
 fs.readFile("sample.txt", function (err, data) {
 	console.log(data);
 });
+
+---
 	출력.
 <Buffer 4c 6f 72 65 6d 20 69 70 73 75 6d 20 64 6f 6c 6f 72 20 73 69 74 20 61 6d 65 74 2c 20 63 6f 6e 73 65 63 74 65 74 75 72 20 61 64 69 70 69 73 63 69 6e 67 ... 713 more bytes>
 
+
 **2	+ utf8
+---
+
 fs.readFile("sample.txt", "utf8", function (err, data) {
     console.log(data);
 });
+
+---
 	출력.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ligula sapien, rutrum sed v...
 
@@ -226,6 +235,58 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ligula sapien, 
 fs.readFile("읽을 파일명.확장자", "utf8", (err, data) => {});
 
 
+
+#13.	#12에 해본걸 적용시켜보기.
+	**1
+ data/폴더 밑에 HTML , CSS , JavaScript 각각 파일을 만들고 <p>태그 내용을 복붙하기.
+
+
+	**2
+ >> # 읽어온 queryData.id값에 해당하는 파일명의 내용을 읽어와 적용시키기.
+---
+
+ fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
+	var template = `
+      	<!doctype html>
+      	<html>
+      	<head>
+         <title>WEB1 - ${title}</title>
+        <meta charset...
+	<p>
+	 ${description}
+	</p>
+	...
+	`;
+
+---
+ 역할 해석.
+ fs.readFile(`data/${queryData.id}`, "utf8", function(err, 내용){
+	var template = `
+	..
+	 <p>
+	  ${description}
+	 </p>
+	..
+	`;
+ });
+
+ - fs.readFile()  파일을 읽어온다.
+ - `data/${queryData.id}`	>> data/HTML
+				>> data/CSS
+				>> data/JavaScript
+
+	url.parse(_url, true).query = queryData 값을 받아온다.
+	queryData.id 값을 읽어온다.
+
+ - function(err, description){
+	..
+	 ${description}
+	..
+   }
+	description변수는 해당 파일 내용을 가져온다.
+
+
+	
 
 
 
