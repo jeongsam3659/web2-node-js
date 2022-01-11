@@ -5,19 +5,13 @@ var url = require("url");
 var app = http.createServer(function (request, response) {
     var _url = request.url;
     var queryData = url.parse(_url, true).query;
+    var pathname = url.parse(_url, true).pathname;
     var title = queryData.id;
-    console.log(queryData.id);
 
-    if (_url == "/") {
-        title = "Welcome";
-    }
-    if (_url == "/favicon.ico") {
-        return response.writeHead(404);
-    }
-    response.writeHead(200);
-    // # 읽어온 queryData.id값에 해당하는 파일명의 내용을 읽어와 적용시키기.
-    fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
-        var template = `
+    if (pathname === "/") {
+        // path에 없는 경로 접속시 해당 내용을 출력
+        fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
+            var template = `
       <!doctype html>
       <html>
       <head>
@@ -38,8 +32,15 @@ var app = http.createServer(function (request, response) {
       </body>
       </html>
       `;
+            response.writeHead(200);
+            response.end(template);
+        });
+    } else {
+        // "/"가 없을시 404NotFound 출력.(에러출력)
+        response.writeHead(404);
+        response.end("Not Found");
+    }
 
-        response.end(template);
-    });
+    // # 읽어온 queryData.id값에 해당하는 파일명의 내용을 읽어와 적용시키기.
 });
 app.listen(3000);

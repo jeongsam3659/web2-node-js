@@ -384,6 +384,22 @@ if (args[2] === "1") {
 
 
 
+	#18 not found
+
+console.log(url.parse(_url, true).pathname);
+url이 가진 정보를 보여준다.[]로
+
+var pathname = 경로를 나타는 변수.
+if (pathname === "/") {
+        // path가 없는 경로 접속시 해당 내용을 출력
+else {
+        // "/"가 없을시 404NotFound 출력.
+
+
+200 - 성공적으로 전송
+404 - 파일을 찾을 수없는 전송
+
+
 
 
 
