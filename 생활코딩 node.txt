@@ -450,14 +450,61 @@ console.log(`total : ${total}`);
 
 
 
-	#22
+	#22 nodejs 파일목록 확인.
+nodejs file list in dir..
+> https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j/2727191
+
+>>
+---
+
+const testFolder = './tests/';
+// 파일 위치가 아닌 실행하는 위치의 데이터dir경로.
+const fs = require('fs');
+ 
+fs.readdir(testFolder, function (error, filelist) {
+    console.log(filelist);
+});
+
+---
+node node.js/readdir.js 명령어 입력시 
+> ['CSS','HTML',JavaScript]가 뜬다.
+> node.js폴더에 실행시에는 undefined가 뜬다. >> testFolder의 변수가 실행하는 위치에서 하위를 읽는데 상위는 못읽는거 같
 
 
 
+	#23 nodejs 글목록 출력.
+태그로 고정되어있는 list를 nodejs로 파일 읽고 해당내용으로 출력.
+---원본
+
+<ol>
+ <li><a href="/?id=Html">HTML</a></li>
+ <li><a href="/?id=Css">CSS</a></li>
+ <li><a href="/?id=JavaScript">JavaScript</a></li>
+</ol>
+  
+---
+---수정
+
+var list = `<ul>`;
+var tegcount = 0;
+while (tegcount < filelist.length) {
+  list = list + `<li><a href="/?id=${filelist[tegcount]}">${filelist[tegcount]}</a></li>`;
+  tegcount = tegcount + 1;
+}
+list = list + `</ul>`;
+
+---
+1. list라는 변수 시작과 끝에 <ul>태그를 넣은 후 
+2. while 증감 반복문을 사용. tegcount는 반복횟수를 의미함.
+3. 	'./data'에 읽어온 파일목록 배열을 filelist에 담은 상태에서
+ > 
+ <조건문> (tegcount < filelist.length)
+기존의 list변수 <li>태그를 넣고 filelist[]배열에 담긴걸 tegcount만큼 반복한다. 
+ list = list + `<li><a href="/?id=${filelist[tegcount]}">${filelist[tegcount]}</a></li>`;
 
 
-
-
+이상태에서 아무파일이나 추가하고 cmd node를 실행하면 
+list에 추가된걸 볼 수 있다.
 
 
 

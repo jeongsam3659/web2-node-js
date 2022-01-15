@@ -10,9 +10,18 @@ var app = http.createServer(function (request, response) {
     if (pathname === "/") {
         // path에 없는 경로 접속시 해당 내용을 출력
         if (queryData.id === undefined) {
-            fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
+            fs.readdir("./data", function (error, filelist) {
                 var title = "welcome";
                 var description = "Hello, Node.js";
+                // 글목록 js
+                var list = `<ul>`;
+                var tegcount = 0;
+                while (tegcount < filelist.length) {
+                    list = list + `<li><a href="/?id=${filelist[tegcount]}">${filelist[tegcount]}</a></li>`;
+                    tegcount = tegcount + 1;
+                }
+                list = list + `</ul>`;
+                //
                 var template = `
                 <!doctype html>
                 <html>
@@ -22,11 +31,7 @@ var app = http.createServer(function (request, response) {
                 </head>
                 <body>
                   <h1><a href="/">WEB</a></h1>
-                  <ol>
-                    <li><a href="/?id=Html">HTML</a></li>
-                    <li><a href="/?id=Css">CSS</a></li>
-                    <li><a href="/?id=JavaScript">JavaScript</a></li>
-                  </ol>
+                  ${list}
                   <h2>${title}</h2>
                   <p>
                     ${description}
@@ -38,9 +43,21 @@ var app = http.createServer(function (request, response) {
                 response.end(template);
             });
         } else {
-            fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
-                var title = queryData.id;
-                var template = `
+            fs.readdir("./data", function (error, filelist) {
+                var title = "welcome";
+                var description = "Hello, Node.js";
+                // 글목록 js
+                var list = `<ul>`;
+                var tegcount = 0;
+                while (tegcount < filelist.length) {
+                    list = list + `<li><a href="/?id=${filelist[tegcount]}">${filelist[tegcount]}</a></li>`;
+                    tegcount = tegcount + 1;
+                }
+                list = list + `</ul>`;
+                //
+                fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
+                    var title = queryData.id;
+                    var template = `
                   <!doctype html>
                   <html>
                   <head>
@@ -49,11 +66,7 @@ var app = http.createServer(function (request, response) {
                   </head>
                   <body>
                     <h1><a href="/">WEB</a></h1>
-                   <ol>
-                      <li><a href="/?id=Html">HTML</a></li>
-                      <li><a href="/?id=Css">CSS</a></li>
-                      <li><a href="/?id=JavaScript">JavaScript</a></li>
-                    </ol>
+                    ${list}
                     <h2>${title}</h2>
                     <p>
                       ${description}
@@ -61,9 +74,10 @@ var app = http.createServer(function (request, response) {
                   </body>
                   </html>
                   `;
-                response.writeHead(200);
-                response.end(template);
-            });
+                    response.writeHead(200);
+                    response.end(template);
+                }); // fs.readFile
+            }); //fs.readdir
         }
     } else {
         // 해당값(html,css,js등등..)에 없으면 404NotFound 출력.(에러출력)
