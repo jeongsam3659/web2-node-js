@@ -524,31 +524,80 @@ function 함수명(매개변수){
 
 
 
+	#25 동기syncrhonous / 비동기asynchronous
+
+	동기
+	0 >> 0 >> 0 >> 0 >>
+
+	비동기 (sync)
+	0 >> 1 >> 1 >> 1 
+	     0 >> 0 >> 0
+
+
+> https://nodejs.org/dist/latest-v16.x/docs/api/fs.html#fsreadfilepath-options-callback
 
 
 
+1. 동기 : fs.readFileSync('읽고자하는파일명')
+console.log("- 출력확인 용 로그 -");
+var result = fs.readFileSync("syntax/sample.txt", "utf-8");
+console.log(result);
+console.log("C");
+
+- 출력확인 용 로그 -
+B
+C
+
+
+2. 비동기 : fs.readFile('읽고자하는파일명', callback(){});
+console.log("- 출력확인 용 로그 -");
+fs.readFile("syntax/sample.txt", "utf-8", function (err, result) {});
+console.log(result);
+console.log("C");
+
+/* 파일 읽는 작업을 마친 후 function의 에러가 있는지 확인후 결과를 도출한다.*/
+
+- 출력확인 용 로그 -
+C
+B
+
+
+- 비동기는 특정 변수에 넣어 처리가능하지만. 동기는 특정변수가 아닌 함수로 작동한다.
+- 동기는 순차적으로 처리하는것에 비해 비동기는 비순차적으로 먼저 결과 나온대로 출력되는걸 볼 수 있다
 
 
 
+	#26 callback
+js에서는 함수가 값이다.??
+function a() {
+    console.log("일반 함수");
+}
+var a = function () {
+    console.log("익명함수");
+};
+
+
+a();
+두가지 함수가 있는데 첫번째는 일반적 함수이고 두번째는 함수명이 따로 없는 익명 함수이다. 익명함수를 호출하기 위해서는 
+변수값을 지정해서 할 수 있는데, 위쪽 function a(){}와 변수a 익명함수는 둘다 a();로도 불러올 수 있다. 
 
 
 
+function(){}단계에서 해당 기능을 종료후 다음에 그 다음일을 진행할때 callback을 선언하기.
+---
 
+var a = function () {
+    console.log("익명함수");
+};
+function slowfunc(callback) {
+    callback();
+}
+slowfunc(a);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
+ > slowfunc()함수가 실행 후 종료되면 callback으로 다음을 실행한다.
+ > slowfunc(a)이니 함수가 종료되면 a를 실행한다.
+ > a인 "익명함수"가 출력된다
 
 
 
