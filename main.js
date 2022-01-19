@@ -13,6 +13,7 @@ function templateHTML(title, list, body) {
   <body>
     <h1><a href="/">WEB</a></h1>
     ${list}
+    <a href="/create">create</a>
     ${body}
   </body>
   </html>
@@ -80,6 +81,29 @@ var app = http.createServer(function (request, response) {
                 }); // fs.readFile
             }); //fs.readdir
         }
+    } else if (pathname === "/create") {
+        //pathname이 "/create"일시 동작.
+        fs.readdir("./data", function (error, filelist) {
+            var title = "WEB - Create";
+
+            // 중복문 함수화
+            //list
+            var list = listHTML(filelist);
+            // html
+            var template = templateHTML(
+                title,
+                list,
+                `
+                <form action="https://localhost:3000/process_create" method="POST">
+                    <p><input type="text" name="title" placeholder="제목" /></p>
+                    <p><textarea cols="30" rows="10" name="description" placeholder="내용"></textarea></p>
+                    <p><input type="submit" value="제출" /></p>
+                </form>
+                `
+            );
+            response.writeHead(200);
+            response.end(template);
+        });
     } else {
         // 해당값(html,css,js등등..)에 없으면 404NotFound 출력.(에러출력)
         response.writeHead(404);

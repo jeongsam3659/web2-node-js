@@ -601,19 +601,76 @@ slowfunc(a);
 
 
 
+	#27 nodejs와 패키지매니저 PM2
+https://pm2.keymetrics.io/( PM2 )
+ > 패키지? 소프트를 부르는 표현 / 독립적 프로그램 / 프로그램의 톱니중 하나.
+ >> NPM
+  >npm install pm2 -g	설치.
+		    (-g : 독립된 소프트웨어)
+
+  > pm2 start main.js
+
+┌─────┬─────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name    │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼─────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ main    │ default     │ N/A     │ fork    │ 21500    │ 0s     │ 0    │ online    │ 0%       │ 31.3mb   │ jeong    │ disabled │
+└─────┴─────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+이런식으로 현재 사용상태를 표시해준다.
+
+
+ > pm2 monit
+ > 현재 pm2에 의해 실행되고있는걸 보여준다.
+
+ > pm2 start main.js --watch(옵션)
+ > 수정할때마다 적용되는걸 확인하기위해 nodejs를 껃다 키는걸 안해된다.
+
+ > pm2 log
+ > 수정사항이 있을시 기록을 보여준다.
+
+ > pm2 stop main.js
+ > main.js를 멈춘다.
 
 
 
 
+	#28 Form
+
+<form action="https://localhost:3000/process_create">
+    <p><input type="text" name="title" /></p>
+    <p><textarea cols="30" rows="10" name="description"></textarea></p>
+    <p><input type="submit" value="제출" /></p>
+</form>
+
+ >> html태그를 하나의 단위로 묵어서 전송하기 위해 Form으로 묶는다.
+ >> 주소창에 https://localhost:3000/process_create?title=hi&description=hello
+  >> action은 데이터가 보내질 주소
+  >> ?title값/ description값을 받을걸 확인할 수 있다.
 
 
+하지만 주소창에 저렇게 값이 노출될시 보안상 문제 및 데이터 처리에 있어 좋지않다.
+따라서, 보내되 보이지않게 처리해야한다.
+
+method="post"  // GET방식 과 POST방식.
+ 서버로부터 사용자가 데이터를 받아 올때는 GET방식
+ 사용자가 서버로 데이터를 전송할때는 POST방식을 쓰는게 일반적이다.
 
 
+	#29 글생성 UI
+
+templateHTML에서 
+    ${list}
+    <a href="/create">create</a> (추가)
+    ${body}
+
+ >> 템플릿html에 작성한거라 다른 html에도 당연히 적용된다.
+ >> 이동시 http://localhost:3000/create
+ >> http.createServer(){}로 이어진다.
+
+else에서 조건을 하나 더 추가하여 else if(pathname이 "/create"일시 동작.){} 
 
 
+기존에 만들어둔 fs.readdir...}); 부분을 복사한 뒤 else if(){}에 넣고
+만들어둔 form을 body에 넣는다.
 
-
-
-
-
-
+그다음 각각 내용을 넣고 크롬 개발자 - Network를 킨 상태에서 submit을 하면 404가 뜨면서 Header옆 paylod에 
+각각의 값이 전송되었던걸 확인할 수있다.
