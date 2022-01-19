@@ -113,26 +113,14 @@ var app = http.createServer(function (request, response) {
         //
         request.on(`end`, function () {
             var post = qs.parse(body);
-            console.log(post);
-            console.log(post.title);
-            console.log(post.description);
             var title = post.title;
             var description = post.description;
-            fs.readdir("./data", function (error, filelist) {
-                var list = listHTML(filelist);
-                // html
-                var template = templateHTML(
-                    title,
-                    list,
-                    `
-                <h2>${title}</h2>
-                <p>
-                ${description}
-                </p>
-                `
-                );
-                response.writeHead(200);
-                response.end(template);
+
+            fs.writeFile(`data/${title}`, description, `utf-8`, function (err) {
+                response.writeHead(302, {
+                    Location: `/?id=${title}`,
+                });
+                response.end();
             });
         });
     } else {
