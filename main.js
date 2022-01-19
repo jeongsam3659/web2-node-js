@@ -3,7 +3,8 @@ var fs = require("fs");
 var url = require("url");
 var qs = require("querystring");
 
-function templateHTML(title, list, body) {
+// 글 템플릿HTML
+function templateHTML(title, list, body, control) {
     return `
   <!doctype html>
   <html>
@@ -14,14 +15,15 @@ function templateHTML(title, list, body) {
   <body>
     <h1><a href="/">WEB</a></h1>
     ${list}
-    <a href="/create">create</a>
+    ${control}
     ${body}
   </body>
   </html>
   `;
 }
+
+//글목록 js
 function listHTML(filelist) {
-    // 글목록 js
     var list = `<ul>`;
     var tegcount = 0;
     while (tegcount < filelist.length) {
@@ -40,6 +42,7 @@ var app = http.createServer(function (request, response) {
 
     if (pathname === "/") {
         // path에 없는 경로 접속시 해당 내용을 출력
+        //  -* 대문 *-
         if (queryData.id === undefined) {
             fs.readdir("./data", function (error, filelist) {
                 var title = "welcome";
@@ -51,11 +54,9 @@ var app = http.createServer(function (request, response) {
                 var template = templateHTML(
                     title,
                     list,
+                    `<h2>${title}</h2><p>${description}</p>`,
                     `
-                    <h2>${title}</h2>
-                    <p>
-                    ${description}
-                    </p>
+                    <a href="/create">create</a> 
                     `
                 );
                 response.writeHead(200);
@@ -63,19 +64,18 @@ var app = http.createServer(function (request, response) {
             });
         } else {
             fs.readdir("./data", function (error, filelist) {
-                // 중복문 함수화
+                //  -* 작성글 *-
                 fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
                     var title = queryData.id;
                     var list = listHTML(filelist);
                     var template = templateHTML(
                         title,
                         list,
+                        `<h2>${title}</h2><p>${description}</p>`,
                         `
-                      <h2>${title}</h2>
-                      <p>
-                      ${description}
-                      </p>
-                      `
+                        <a href="/create">create</a> 
+                        <a href="/update?id=${title}">update</a>
+                        `
                     );
                     response.writeHead(200);
                     response.end(template);
@@ -83,34 +83,38 @@ var app = http.createServer(function (request, response) {
             }); //fs.readdir
         }
     } else if (pathname === "/create") {
+        //  -* Create 글 작성. *-
         //pathname이 "/create"일시 동작.
         fs.readdir("./data", function (error, filelist) {
             var title = "WEB - Create";
-
-            // 중복문 함수화
-            //list
             var list = listHTML(filelist);
-            // html
             var template = templateHTML(
                 title,
                 list,
                 `
-                <form action="http://localhost:3000/create_process" method="POST">
-                    <p><input type="text" name="title" placeholder="제목" /></p>
-                    <p><textarea cols="30" rows="10" name="description" placeholder="내용"></textarea></p>
-                    <p><input type="submit" value="제출" /></p>
+                <form action="/create_process" method="POST">
+                    <p>
+                        <input type="text" name="title" placeholder="제목" />
+                    </p>
+                    <p>
+                        <textarea cols="30" rows="10" name="description" placeholder="내용"></textarea>
+                    </p>
+                    <p>
+                        <input type="submit" value="제출" />
+                    </p>
                 </form>
-                `
+                `,
+                ``
             );
             response.writeHead(200);
             response.end(template);
         });
     } else if (pathname === `/create_process`) {
+        //  -* create 글 결과처리. *-
         var body = ``;
         request.on(`data`, function (data) {
             body = body + data;
         });
-        //
         request.on(`end`, function () {
             var post = qs.parse(body);
             var title = post.title;
@@ -122,6 +126,63 @@ var app = http.createServer(function (request, response) {
                 });
                 response.end();
             });
+        });
+    } else if (pathname === `/update`) {
+        //  -* Update 글 수정. *-
+        //pathname이 "/update"일시 동작.
+        fs.readdir("./data", function (error, filelist) {
+            fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
+                var title = queryData.id;
+                var list = listHTML(filelist);
+                var template = templateHTML(
+                    title,
+                    list,
+                    `
+                    <form action="/update_process" method="POST">
+                        <input type="hidden" name="id" value="${title}">
+                        <p>
+                            <input type="text" name="title" placeholder="제목" value="${title}" />
+                        </p>
+                        <p>
+                            <textarea cols="30" rows="10" name="description" placeholder="내용">${description}</textarea>
+                        </p>
+                        <p>
+                            <input type="submit" value="제출" />
+                        </p>
+                    </form>
+                    `,
+                    `
+                    <a href="/create">create</a> 
+                    <a href="/update?id=${title}">update</a>
+                    `
+                );
+                response.writeHead(200);
+                response.end(template);
+            });
+        });
+    } else if (pathname === `/update_process`) {
+        //  -* update 글 결과처리. *-
+        var body = ``;
+        request.on(`data`, function (data) {
+            body = body + data;
+        });
+        request.on(`end`, function () {
+            var post = qs.parse(body);
+            var title = post.title;
+            var description = post.description;
+            var id = post.id;
+
+            // fs.readfile
+            fs.rename(`data/${id}`, `data/${title}`, function (error) {
+                //
+                fs.writeFile(`data/${title}`, description, `utf-8`, function (err) {
+                    response.writeHead(302, {
+                        Location: `/?id=${title}`,
+                    });
+                    response.end();
+                });
+            });
+            console.log(post);
         });
     } else {
         // 해당값(html,css,js등등..)에 없으면 404NotFound 출력.(에러출력)
