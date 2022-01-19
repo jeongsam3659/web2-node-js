@@ -674,3 +674,91 @@ else에서 조건을 하나 더 추가하여 else if(pathname이 "/create"일시
 
 그다음 각각 내용을 넣고 크롬 개발자 - Network를 킨 상태에서 submit을 하면 404가 뜨면서 Header옆 paylod에 
 각각의 값이 전송되었던걸 확인할 수있다.
+
+
+	#30 POST방식으로 전송된 데이터 받기
+
+else if (pathname === `/create_process`) {
+      response.writeHead(200);
+      response.end("success post");
+을 걸어 submit했을 시 정상적으로 동작하는 지 확인. success post가 출력되면 정상적으로 동작.
+ >> https://로 하면 404가 터진다. 몰?루
+
+
+how do you extract post data in node.js postdata를 출력하는지?
+https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+---
+
+var qs = require('querystring');
+
+function (request, response) {
+    if (request.method == 'POST') {
+        var body = '';
+
+        request.on('data', function (data) {
+            body += data;
+
+            // Too much POST data, kill the connection!
+            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+            if (body.length > 1e6)
+                request.connection.destroy();
+        });
+
+        request.on('end', function () {
+            var post = qs.parse(body);
+            // use post['blah'], etc.
+        });
+    }
+}
+
+---
+var request역할
+ - http.createServer(function (request, response) {...
+  >> .createServer에 전달된 callback함수. 
+  nodejs로 웹브라우저가 접속이 들어올때마다 
+  .createServer의 callback함수를 node.js가 호출한다. 이때 그 함수에 인자를 두개 준다.
+  	>> request에는 요청할때 웹브라우저가 보낸 정보
+ 	>> response는 응답할때 사용자가 웹브라우저에 보내는 정보.
+
+ - request.on(`data`, function (data) {});
+	>> 웹브라우저가 post방식으로 데이터를 전송할때, 데이터가 많을시. 한번에 처리할때 컴퓨터가 멈추거나 꺼지는 경우를 대비해서.
+	>> 조각조각 양의 서버쪽에서 수신할때마다 callback함수를 호출하도록 약속되어있다. 그리고 호출할때마다 data라는 인자를 통해 수신한 정보를 주기로 되어있다.
+	>> body = body + data;
+	  >>> callback이 실행될때마다 data가 추가된다.
+
+	>> if (body.length > 1e6)
+                request.connection.destroy();
+	  >>> 만약 전송한 데이터가 너무 클시 접속을 끊어버리는 보안장치이다.
+	  >>>   // Too much POST data, kill the connection!
+            	// 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+ - request.on(`end`, function () {});
+	 >> 더이상 들어올 정보가 없을시 `end` callback함수를 호출하도록 약속되어있다.
+	 >>  var post = qs.parse(body);	
+
+	 >> var qs = require('querystring');
+	   >>> node.js의 모듈을 가져오는 걸 알 수있다.
+	   >>> 모듈? 
+
+ - 전송시 pm2 log에  [Object: null prototype] { title: 'node', description: 'nodejs is..' }으로 출력된다.
+  > 즉, post.title = `node` , post.description = `nodejs is...`값으로 이루어진 객체화로 알 수 있다.
+  >
+fs.readdir("./data", function (error, filelist) {
+                //list
+                var list = listHTML(filelist);
+                // html
+                var template = templateHTML(
+                    title,
+                    list,
+                    `
+                <h2>${title}</h2>
+                <p>
+                ${description}
+                </p>
+                `
+                );
+                response.writeHead(200);
+                response.end(template);
+            });
+
+룰 바로 밑에 붙여주고 templateHTML(,,body){} body에 해당 값 title과 description을 넣어주면 post된 값을 페이지에 출력할수있다.
+ 

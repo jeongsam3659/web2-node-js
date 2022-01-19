@@ -1,6 +1,7 @@
 var http = require("http");
 var fs = require("fs");
 var url = require("url");
+var qs = require("querystring");
 
 function templateHTML(title, list, body) {
     return `
@@ -94,7 +95,7 @@ var app = http.createServer(function (request, response) {
                 title,
                 list,
                 `
-                <form action="https://localhost:3000/process_create" method="POST">
+                <form action="http://localhost:3000/create_process" method="POST">
                     <p><input type="text" name="title" placeholder="제목" /></p>
                     <p><textarea cols="30" rows="10" name="description" placeholder="내용"></textarea></p>
                     <p><input type="submit" value="제출" /></p>
@@ -103,6 +104,36 @@ var app = http.createServer(function (request, response) {
             );
             response.writeHead(200);
             response.end(template);
+        });
+    } else if (pathname === `/create_process`) {
+        var body = ``;
+        request.on(`data`, function (data) {
+            body = body + data;
+        });
+        //
+        request.on(`end`, function () {
+            var post = qs.parse(body);
+            console.log(post);
+            console.log(post.title);
+            console.log(post.description);
+            var title = post.title;
+            var description = post.description;
+            fs.readdir("./data", function (error, filelist) {
+                var list = listHTML(filelist);
+                // html
+                var template = templateHTML(
+                    title,
+                    list,
+                    `
+                <h2>${title}</h2>
+                <p>
+                ${description}
+                </p>
+                `
+                );
+                response.writeHead(200);
+                response.end(template);
+            });
         });
     } else {
         // 해당값(html,css,js등등..)에 없으면 404NotFound 출력.(에러출력)
