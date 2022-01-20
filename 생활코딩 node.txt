@@ -779,3 +779,12 @@ delete를 Get방식으로 구현해놓았다.주소를 활용해서 아무 파�
 
 https://stackoverflow.com/questions/5315138/node-js-remove-file
 fs.unlink(path, callback)
+
+fs.unlink(`data/${id}`, function (error) {
+                response.writeHead(302, {
+                    Location: `/`,
+                });
+                // 삭제시 홈으로 보내기.
+                response.end();
+            });
+
