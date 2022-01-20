@@ -75,6 +75,10 @@ var app = http.createServer(function (request, response) {
                         `
                         <a href="/create">create</a> 
                         <a href="/update?id=${title}">update</a>
+                        <form action="delete_process" method="POST">
+                            <input type="hidden" name="id" value="${title}">
+                            <input type="submit" value="delete">
+                        </form>
                         `
                     );
                     response.writeHead(200);
@@ -120,9 +124,9 @@ var app = http.createServer(function (request, response) {
             var title = post.title;
             var description = post.description;
 
-            fs.writeFile(`data/${title}`, description, `utf-8`, function (err) {
+            fs.writeFile(`data/${title}`, description, `utf-8`, function (error) {
                 response.writeHead(302, {
-                    Location: `/?id=${title}`,
+                    Location: `/`,
                 });
                 response.end();
             });
@@ -168,9 +172,11 @@ var app = http.createServer(function (request, response) {
         });
         request.on(`end`, function () {
             var post = qs.parse(body);
+            var id = post.id;
             var title = post.title;
             var description = post.description;
-            var id = post.id;
+
+            console.log(id);
 
             // fs.readfile
             fs.rename(`data/${id}`, `data/${title}`, function (error) {
@@ -182,7 +188,23 @@ var app = http.createServer(function (request, response) {
                     response.end();
                 });
             });
-            console.log(post);
+        });
+    } else if (pathname === `/delete_process`) {
+        //  -* delete 글 결과처리. *-
+        var body = ``;
+        request.on(`data`, function (data) {
+            body = body + data;
+        });
+        request.on(`end`, function () {
+            var post = qs.parse(body);
+            var id = post.id;
+            fs.unlink(`data/${id}`, function (error) {
+                response.writeHead(302, {
+                    Location: `/`,
+                });
+                // 삭제시 홈으로 보내기.
+                response.end();
+            });
         });
     } else {
         // 해당값(html,css,js등등..)에 없으면 404NotFound 출력.(에러출력)

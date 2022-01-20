@@ -762,3 +762,20 @@ fs.readdir("./data", function (error, filelist) {
 
 룰 바로 밑에 붙여주고 templateHTML(,,body){} body에 해당 값 title과 description을 넣어주면 post된 값을 페이지에 출력할수있다.
  
+
+
+
+	#31 delete
+update와 동일하게 가되 
+a태그로 구현하면 안된다.
+ >> 주소로 구현할 경우. 
+
+
+
+과거, 주소를 클릭시 해당으로 빠르게 이동하게 미리 웹페이지를 이동하는 캐싱. 이있는데.
+delete를 Get방식으로 구현해놓았다.주소를 활용해서 아무 파일이나 페이지가 삭제되는 악용사례가 있다.
+ >> form문으로 구현.
+
+
+https://stackoverflow.com/questions/5315138/node-js-remove-file
+fs.unlink(path, callback)
