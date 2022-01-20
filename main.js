@@ -3,37 +3,7 @@ var fs = require("fs");
 var url = require("url");
 var qs = require("querystring");
 
-// 글 템플릿HTML
-function templateHTML(title, list, body, control) {
-    return `
-  <!doctype html>
-  <html>
-  <head>
-    <title>WEB1 - ${title}</title>
-    <meta charset="utf-8">
-  </head>
-  <body>
-    <h1><a href="/">WEB</a></h1>
-    ${list}
-    ${control}
-    ${body}
-  </body>
-  </html>
-  `;
-}
-
-//글목록 js
-function listHTML(filelist) {
-    var list = `<ul>`;
-    var tegcount = 0;
-    while (tegcount < filelist.length) {
-        list = list + `<li><a href="/?id=${filelist[tegcount]}">${filelist[tegcount]}</a></li>`;
-        tegcount = tegcount + 1;
-    }
-    list = list + `</ul>`;
-    // 위에서 해당 list변수에 내용을 담은 후 list변수를 반환
-    return list;
-}
+var template = require(`./lib/template.js`);
 
 var app = http.createServer(function (request, response) {
     var _url = request.url;
@@ -47,7 +17,9 @@ var app = http.createServer(function (request, response) {
             fs.readdir("./data", function (error, filelist) {
                 var title = "welcome";
                 var description = "Hello, Node.js";
-                // 중복문 함수화
+
+                /*
+                // 중복문 함수화 (old)
                 //list
                 var list = listHTML(filelist);
                 // html
@@ -59,16 +31,30 @@ var app = http.createServer(function (request, response) {
                     <a href="/create">create</a> 
                     `
                 );
+                */
+
+                // 중복문 함수화
+                //list
+                var list = template.list(filelist);
+                // html
+                var html = template.html(
+                    title,
+                    list,
+                    `<h2>${title}</h2><p>${description}</p>`,
+                    `
+                    <a href="/create">create</a> 
+                    `
+                );
                 response.writeHead(200);
-                response.end(template);
+                response.end(html);
             });
         } else {
             fs.readdir("./data", function (error, filelist) {
                 //  -* 작성글 *-
                 fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
                     var title = queryData.id;
-                    var list = listHTML(filelist);
-                    var template = templateHTML(
+                    var list = template.list(filelist);
+                    var html = template.html(
                         title,
                         list,
                         `<h2>${title}</h2><p>${description}</p>`,
@@ -82,7 +68,7 @@ var app = http.createServer(function (request, response) {
                         `
                     );
                     response.writeHead(200);
-                    response.end(template);
+                    response.end(html);
                 }); // fs.readFile
             }); //fs.readdir
         }
@@ -91,8 +77,8 @@ var app = http.createServer(function (request, response) {
         //pathname이 "/create"일시 동작.
         fs.readdir("./data", function (error, filelist) {
             var title = "WEB - Create";
-            var list = listHTML(filelist);
-            var template = templateHTML(
+            var list = template.list(filelist);
+            var html = template.html(
                 title,
                 list,
                 `
@@ -111,7 +97,7 @@ var app = http.createServer(function (request, response) {
                 ``
             );
             response.writeHead(200);
-            response.end(template);
+            response.end(html);
         });
     } else if (pathname === `/create_process`) {
         //  -* create 글 결과처리. *-
@@ -137,8 +123,8 @@ var app = http.createServer(function (request, response) {
         fs.readdir("./data", function (error, filelist) {
             fs.readFile(`data/${queryData.id}`, "utf8", function (err, description) {
                 var title = queryData.id;
-                var list = listHTML(filelist);
-                var template = templateHTML(
+                var list = template.list(filelist);
+                var html = template.html(
                     title,
                     list,
                     `
@@ -161,7 +147,7 @@ var app = http.createServer(function (request, response) {
                     `
                 );
                 response.writeHead(200);
-                response.end(template);
+                response.end(html);
             });
         });
     } else if (pathname === `/update_process`) {

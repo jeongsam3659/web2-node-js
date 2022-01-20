@@ -898,3 +898,46 @@ var o = {
 함수선언을 this.으로 자신을 가리키는 약속어를 쓴다.
 
 
+
+	#34 template 재정립.
+template.list
+template.html
+
+동작은 동일하게 하면서 코드 가독성을 높이거나 재정립하는걸 refactoring
+
+function ..으로 정의되어있는걸.
+
+var tempalte ={
+	html:function()...,
+	list:function()...,
+	
+}
+이런식 객체화 시키고. 선언시 template.html등으로 재정립한다.
+재정립은 단계단계를 거치면서 하고 처음부터 완전을 꿈꾸지말고 여러번 시도해보면서 배운점을 적용시켜봐야한다.
+
+
+
+
+	#35 Module 모듈.
+객체도 추가하면 가독성이 떨어지니 하나의 독립 파일로 구분해서 쪼개서 관리.
+
+// module 바깥에서 사용 = 그 대상.
+module.exports = M;
+
+// module수신해서 받아오기.
+var part = require(`./mPart.js`);
+  > [v: `v` , f: function]으로 객체로 받아온다.
+
+//실행
+part.f();
+
+
+main.js에 적용.
+var tempalte ={
+	html:function()...,
+	list:function()...,
+}을 lib/ template.js로 옮기고
+
+template 변수명 대신  module.exports로 선언.
+
+main.js엔 require(`./lib/template.js`); 로 불러온다.
