@@ -1,0 +1,76 @@
+오후 10:44 2022-01-21
+
+	# security
+Post방식이여도 코드 몇가지만 수정만하면 아이디/패스워드 뿐만아니라 디렉토리 구성도 노출될 수 있다.
+
+ > https://nodejs.org/api/path.html#pathparsepath
+ > path.parse('../대상주소/대상파일');
+ > path.parse().base;로 대상파일의 경로를 세탁할 수 있다
+
+외부에서 들어온 정보나 코드가 외부로 나갈때 오염될 수 있으니 철저히 의심해봐야한다.
+
+var path = require(`path`);
+
+...
+readdir(),function(){
+	var filteredId = pathparse(queryData.id).base;
+	fs.readFile(`data/${filterId}` , `utf...
+}
+으로 수정.
+
+ + 삭제할때
+var id = post.id;
+var filteredId = path.parse(id).base;
+fs.unlink(`data/${filteredId})` , funct...
+
+
+
+	# 출력정보에 대한 보안
+오염된 정보가 나가는 경우의 수.
+ex_
+XSS기법으로 
+<script> alert("메롱 출력"); </script> 입력후 글이 생성되면 스크립트 안 js가 실행된다.
+
+>https://www.w3schools.com/html/html_entities.asp
+
+ex_ 해당 문자를 쓰면 웹브라우저는 해당 문자를 로 표시한다.
+	<		&lt;
+
+&lt script &rt --->> <script>
+
+Sanitizer 살균이라는 뜻으로
+해당 문자를 자동처리해주는 API  
+ > npm Sanitizer
+ > https://www.npmjs.com/package/sanitize-html
+
+cmd >>해당 디렉토리>> npm init >> 
+packname부터 쭉 enter 하면 생성
+
+>> npm install -S >> node_dir에 오만가지 파일이 들어온다. 그중 Sanitizer html 디렉토리를 찾고, packjson dependencise에 Sanitizer html의 버젼이 적혀있다
+
+
+npm sanitizer에서 How to use부근
+
+//신
+const sanitizeHtml = require('sanitize-html');
+//구
+var sanitizeHTML = require("stanitize-html");ㄴ
+
+//
+const dirty = 대상이되는 html
+const clean = 살균?되는 형태.
+
+var title =...
+var sanitizedTitle = sanitizeHtml(title);
+var sanitizedDescription = sanitizeHtml(description);
+...
+title 들어간 부분을 sanitizedTitle
+description 들어간 부분을 sanitizedDescription으로 교체해준다..
+
+
+5:08 allow
+
+
+
+	# API
+application programming interface 약자
